@@ -129,25 +129,25 @@ navbar .logo {
   cursor: pointer;
   text-decoration: underline;
 }
-.main .video-cont {
+.main .video-container {
   max-width: 1100px;
   text-align: center;
   margin: 0 auto;
 }
-.main .video-cont .video-self {
+.main .video-container .video-self {
   height: 400px;
   max-width: 1100px;
   background-color: black;
   border-radius: 5px;
   object-fit: cover;
 }
-.main .video-cont .settings {
+.main .video-container .settings {
   margin: 0 auto;
   display: flex;
   margin-top: 10px;
   width: 100px;
 }
-.main .video-cont .settings .device {
+.main .video-container .settings .device {
   background-color: rgb(0,37,255);
   border-radius: 100px;
   padding: 10px;
@@ -156,11 +156,11 @@ navbar .logo {
   margin-right: 10px;
   color: white;
 }
-.main .video-cont .settings .device:hover {
+.main .video-container .settings .device:hover {
   background-color: #393e46;
   cursor: pointer;
 }
-.main .video-cont .settings .nodevice {
+.main .video-container .settings .nodevice {
   background-color: #b12c2c;
   border-radius: 100px;
   padding: 10px;
@@ -169,7 +169,7 @@ navbar .logo {
   margin-right: 10px;
   color: white;
 }
-.main .video-cont .settings .nodevice:hover {
+.main .video-container .settings .nodevice:hover {
   background-color: #393e46;
   cursor: pointer;
 }
@@ -182,7 +182,7 @@ navbar .logo {
     width: 100%;
     margin-right: 0;
   }
-  .main .video-cont {
+  .main .video-container {
     margin-top: 100px;
     margin-bottom: 100px;
   }
@@ -247,7 +247,7 @@ navbar .logo {
   outline: 0;
 }
 
-.container-room {
+.container {
   margin: 0;
   top: 0;
   bottom: 0;
@@ -256,7 +256,7 @@ navbar .logo {
 }
 
 
-.left-cont {
+.left-container {
   width: 100%;
   background-color: #393e46;
   height: 100vh;
@@ -265,13 +265,13 @@ navbar .logo {
   position: relative;
 }
 
-.video-cont {
+.video-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   height: 77vh;
 }
-.video-cont .video-box {
+.video-container .video-box {
   background-color: #353b48;
   height: 100%;
   min-height: 200px;
@@ -279,7 +279,7 @@ navbar .logo {
   border-radius: 5px;
   position: relative;
 }
-.video-cont .video-box .video-frame {
+.video-container .video-box .video-frame {
   background-color: #353b48;
   height: 100%;
   min-height: 200px;
@@ -287,14 +287,14 @@ navbar .logo {
   object-fit: cover;
   border-radius: 5px;
 }
-.video-cont .video-box .nametag {
+.video-container .video-box .participant-name {
   color: white;
   bottom: 10px;
   position: absolute;
   left: 15px;
   bottom: 10px;
 }
-.video-cont .video-box .video-off {
+.video-container .video-box .video-off {
   color: white;
   bottom: 10px;
   position: absolute;
@@ -306,17 +306,17 @@ navbar .logo {
   margin-left: auto;
   margin-right: auto;
 }
-.video-cont .video-box .mute-icon {
+.video-container .video-box .mute-symbol {
   color: red;
   position: absolute;
   bottom: 10px;  
   right: 10px;
   font-size: 30px;
 }
-.video-cont-single {
+.video-container-single {
   height: 77vh;
 }
-.video-cont-single .video-box {
+.video-container-single .video-box {
   background-color: #353b48;
   height: 100%;
   min-height: 200px;
@@ -325,7 +325,7 @@ navbar .logo {
   border-radius: 5px;
   position: relative;
 }
-.video-cont-single .video-box .video-frame {
+.video-container-single .video-box .video-frame {
   background-color: #353b48;
   height: 100%;
   min-height: 200px;
@@ -333,14 +333,14 @@ navbar .logo {
   object-fit: cover;
   border-radius: 5px;
 }
-.video-cont-single .video-box .nametag {
+.video-container-single .video-box .participant-name {
   color: white;
   bottom: 10px;
   position: absolute;
   left: 10px;
   bottom: 10px;
 }
-.video-cont-single .video-box .video-off {
+.video-container-single .video-box .video-off {
   color: white;
   bottom: 10px;
   font-weight: bold;
@@ -352,7 +352,7 @@ navbar .logo {
   margin-left: auto;
   margin-right: auto;
 }
-.video-cont-single .video-box .mute-icon {
+.video-container-single .video-box .mute-symbol {
   color: #d63434;
   bottom: 10px;
   position: absolute;
@@ -391,7 +391,7 @@ navbar .logo {
   cursor: pointer;
   background-color: #393e46;
 }
-.novideo {
+.camera {
   background-color: rgb(0,37,255);
   text-align: center;
   color: white;
@@ -401,7 +401,7 @@ navbar .logo {
   border-radius: 100px;
   transition: background-color 0.3s;
 }
-.novideo:hover {
+.camera:hover {
   cursor: pointer;
   background-color: #393e46;
 }
@@ -434,22 +434,7 @@ navbar .logo {
   background-color: #393e46;
 }
 
-
-/* .showchat {
-  background-color: rgb(0,37,255);
-  text-align: center;
-  margin-left: 10px;
-  color: #393e46;
-  padding: 10px;
-  height: 60px;
-  width: 60px;
-  border-radius: 100px;
-  transition: background-color 0.3s;
-  transition: color 0.3s;
-} */
-
-
-.right-cont {
+.right-container {
   background-color: rgb(37, 37, 37);
   display: none;
   width: 30%;
@@ -457,7 +442,6 @@ navbar .logo {
   color: rgb(37, 37, 37);
   height: 100vh;
 }
-
 
 .head-title {
   font-weight: bold;
@@ -467,6 +451,7 @@ navbar .logo {
   display: flex;
   border-bottom: 2px solid #393e46;
 }
+
 .chats {
   padding: 10px;
   padding-top: 10px;
@@ -476,13 +461,14 @@ navbar .logo {
   transition: background-color 0.5s;
 }
 
-.chat-cont {
+.chat-container {
   background-color: rgb(37, 37, 37);
   height: 84vh;
   padding: 10px;
   padding-top: 10px;
   overflow-y: scroll;
 }
+
 .message {
   padding: 10px;
   background-color: rgb(37, 37, 37);
@@ -499,6 +485,7 @@ navbar .logo {
   display: flex;
   font-size: 1.1rem;
 }
+
 .message .info .username {
   font-weight: bold;
   color: rgb(0,37,255);
@@ -506,11 +493,13 @@ navbar .logo {
 .message .info .time {
   margin-left: 12px;
 }
+
 .message .content {
   margin-top: 5px;
   font-size: 1rem;
 }
-.chat-input-cont {
+
+.chat-input-container {
   position: absolute;
   bottom: 10px;
   padding: 12px;
@@ -520,14 +509,17 @@ navbar .logo {
   background-color: rgb(37, 37, 37);
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.15);
 }
-.chat-input-cont .ci-cont {
+
+.chat-input-container .chat-input-box {
   width: 100%;
 }
-.chat-input-cont .ci-send {
+
+.chat-input-container .chat-send-box {
   width: 10%;
   margin-left: 10px;
 }
-.chat-input-cont .chat-input {
+
+.chat-input-container .chat-input {
   width: 100%;
   height: 36px;
   font-size: 0.85rem;
@@ -536,10 +528,12 @@ navbar .logo {
   border-bottom: 3px solid rgb(0,37,255);
   color: whitesmoke;
 }
-.chat-input-cont .chat-input:focus {
+
+.chat-input-container .chat-input:focus {
   outline: none;
 }
-.chat-input-cont .chat-send {
+
+.chat-input-container .chat-send {
   height: 36px;
   padding: 5px 20px;
   border: none;
@@ -550,12 +544,14 @@ navbar .logo {
   border-radius: 2px;
   transition: background-color 0.5s;
 }
-.chat-input-cont .chat-send:hover {
+
+.chat-input-container .chat-send:hover {
   color: #2980b9;
   cursor: pointer;
   background-color: #f3f3f3;
 }
-.chat-input-cont .chat-send:focus {
+
+.chat-input-container .chat-send:focus {
   outline: none;
 }
 
@@ -597,5 +593,3 @@ navbar .logo {
   visibility: visible;
   opacity: 0.8;
 }
-
-/*# sourceMappingURL=style.css.map */

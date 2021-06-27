@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    
     <div class="overlay" id="overlay">
         <div class="box">
             <div class="head-name">Enter a Name</div>
@@ -22,15 +23,17 @@
             <button class="continue-name">Continue</button>
         </div>
     </div>
-    <div class="container-room">
-        <div class="left-cont">
 
-            <div class="video-cont-single" id="vcont">
+    <div class="container">
+        
+        <div class="left-container">
+
+            <div class="video-container-single" id="vcont">
                 <div class="video-box">
                     <video class="video-frame" id="vd1" autoplay playsinline>
                     </video>
-                    <div class="nametag" id="myname">yourname</div>
-                    <div class="mute-icon" id="mymuteicon"><i class="fas fa-microphone-slash"></i></div>
+                    <div class="participant-name" id="myname">yourname</div>
+                    <div class="mute-symbol" id="mymuteicon"><i class="fas fa-microphone-slash"></i></div>
                     <div class="video-off" id="myvideooff">Video Off</div>
                 </div>
             </div>
@@ -54,7 +57,7 @@
                         <span class="tooltiptext">Mute</span>
                     </div>
 
-                    <div class="novideo icon tooltip icon">
+                    <div class="camera icon tooltip icon">
                         <i class="fas fa-video"></i>
                         <span class="tooltiptext">Turn Video Off</span>
                     </div>
@@ -64,7 +67,7 @@
                         <span class="tooltiptext">Leave Call</span>
                     </div>
                     
-                    <div class="showchat tooltip icon">
+                    <div class="toggle-chat tooltip icon">
                         <i class="far fa-comment"></i>
                         <span class="tooltiptext">Chat</span>
                     </div>
@@ -76,19 +79,19 @@
 
         </div>
 
-        <div class="right-cont">
+        <div class="right-container">
         
             <div class="head-title">
-                <div class="chats"><i class="fas fa-comment-alt mr-1"></i>    Chat</div>
+                <div class="chats"><i class="fas fa-comment-alt mr-1"></i>Chat</div>
             </div>
 
-            <div class="chat-cont">
+            <div class="chat-container">
 
             </div>
 
-            <div class="chat-input-cont">
-                <div class="ci-cont"><input type="text" class="chat-input" placeholder="Type chat here.." style = "color: black;"></div>
-                <div class="ci-send"><button class="chat-send"><i class = "fas fa-paper-plane"></i></button></div>
+            <div class="chat-input-container">
+                <div class="chat-input-box"><input type="text" class="chat-input" placeholder="Type chat here.." style = "color: black;"></div>
+                <div class="chat-send-box"><button class="chat-send"><i class = "fas fa-paper-plane"></i></button></div>
             </div>
         
         </div>

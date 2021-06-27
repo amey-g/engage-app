@@ -42,14 +42,14 @@ navbar .logo {
   width: 100%;
 }
 
-.left-container {
+.left-containerainer {
   width: 35%;
   padding: 20px;
   text-align: center;
   vertical-align: middle;
 }
 
-.right-container{
+.right-containerainer{
   width: 65%;
   text-align: center;
 }
@@ -152,7 +152,7 @@ navbar .logo {
     width: 100%;
     margin-right: 0;
   }
-  .main .video-cont {
+  .main .video-container {
     margin-top: 100px;
     margin-bottom: 100px;
   }

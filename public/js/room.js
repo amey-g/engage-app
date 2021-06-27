@@ -2,23 +2,23 @@ const socket = io();
 const myvideo = document.querySelector("#vd1");
 const roomid = params.get("room");
 let username;
-const chatRoom = document.querySelector('.chat-cont');
+const chatRoom = document.querySelector('.chat-container');
 const sendButton = document.querySelector('.chat-send');
 const messageField = document.querySelector('.chat-input');
 const videoContainer = document.querySelector('#vcont');
 const overlayContainer = document.querySelector('#overlay')
 const continueButt = document.querySelector('.continue-name');
 const nameField = document.querySelector('#name-field');
-const videoButt = document.querySelector('.novideo');
+const videoButt = document.querySelector('.camera');
 const audioButt = document.querySelector('.audio');
 const inviteParticipants = document.querySelector('.invite');
 const cutCall = document.querySelector('.cutcall');
 const screenShareButt = document.querySelector('.screenshare');
 const whiteboardButt = document.querySelector('.board-icon')
 
-const leftcont = document.querySelector('.left-cont')
-const rightcont = document.querySelector('.right-cont')
-const chatbutton = document.querySelector('.showchat')
+const leftcont = document.querySelector('.left-container')
+const rightcont = document.querySelector('.right-container')
+const chatbutton = document.querySelector('.toggle-chat')
 
 let videoAllowed = 1;
 let audioAllowed = 1;
@@ -96,10 +96,10 @@ nameField.addEventListener("keyup", function (event) {
 
 socket.on('user count', count => {
     if (count > 1) {
-        videoContainer.className = 'video-cont';
+        videoContainer.className = 'video-container';
     }
     else {
-        videoContainer.className = 'video-cont-single';
+        videoContainer.className = 'video-container-single';
     }
 })
 
@@ -174,8 +174,8 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             let muteIcon = document.createElement('div');
             let videoOff = document.createElement('div');
             videoOff.classList.add('video-off');
-            muteIcon.classList.add('mute-icon');
-            name.classList.add('nametag');
+            muteIcon.classList.add('mute-symbol');
+            name.classList.add('participant-name');
             name.innerHTML = `${cName[sid]}`;
             vidCont.id = sid;
             muteIcon.id = `mute${sid}`;
@@ -322,8 +322,8 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     let muteIcon = document.createElement('div');
                     let videoOff = document.createElement('div');
                     videoOff.classList.add('video-off');
-                    muteIcon.classList.add('mute-icon');
-                    name.classList.add('nametag');
+                    muteIcon.classList.add('mute-symbol');
+                    name.classList.add('participant-name');
                     name.innerHTML = `${cName[sid]}`;
                     vidCont.id = sid;
                     muteIcon.id = `mute${sid}`;
@@ -532,7 +532,7 @@ audioButt.addEventListener('click', () => {
 })
 
 inviteParticipants.addEventListener('click', () => {
-    
+
 })
 
 socket.on('action', (msg, sid) => {
