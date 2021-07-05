@@ -141,7 +141,9 @@ navbar .logo {
   background-color: black;
   border-radius: 8px;
   object-fit: cover;
+  transform: scale(-1, 1);
 }
+
 
 
 @media (max-width: 1200px) {
