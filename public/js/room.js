@@ -68,16 +68,15 @@ function setEraser() {
     drawsize = 10;
 }
 
-//might remove this
 function reportWindowSize() {
     fitToContainer(canvas);
 }
 
 window.onresize = reportWindowSize;
-//
+
 
 function clearBoard() {
-    if (window.confirm('Are you sure you want to clear board? This cannot be undone')) {
+    if (window.confirm('Are you sure you want to clear the board?')) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         socket.emit('store canvas', canvas.toDataURL());
         socket.emit('clearBoard');
@@ -154,7 +153,21 @@ mymuteicon.style.visibility = 'hidden';
 let myvideooff = document.querySelector("#myvideooff");
 myvideooff.style.visibility = 'hidden';
 
-const configuration = { iceServers: [{ urls: "stun:stun.stunprotocol.org" }] }
+const configuration = { iceServers: [
+    {
+      'url': 'stun:stun.l.google.com:19302'
+    },
+    {
+      'url': 'turn:192.158.29.39:3478?transport=udp',
+      'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+      'username': '28224511:1379330808'
+    },
+    {
+      'url': 'turn:192.158.29.39:3478?transport=tcp',
+      'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+      'username': '28224511:1379330808'
+    }
+  ] }
 
 const mediaConstraints = { video: true, audio: true };
 
@@ -391,7 +404,6 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
 function handleNewIceCandidate(candidate, sid) {
     console.log('new candidate recieved')
     var newcandidate = new RTCIceCandidate(candidate);
-
     connections[sid].addIceCandidate(newcandidate)
         .catch(reportError);
 }
