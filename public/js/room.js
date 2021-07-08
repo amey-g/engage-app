@@ -20,7 +20,7 @@ const leftcont = document.querySelector('.left-container')
 const rightcont = document.querySelector('.right-container')
 const chatbutton = document.querySelector('.toggle-chat')
 
-const whiteboardCont = document.querySelector('.whiteboard-cont');
+const whiteboardCont = document.querySelector('.whiteboard-container');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
 
