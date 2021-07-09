@@ -7,26 +7,27 @@ const sendButton = document.querySelector('.chat-send');
 const messageField = document.querySelector('.chat-input');
 const videoContainer = document.querySelector('#vcont');
 const overlayContainer = document.querySelector('#overlay')
-const continueButt = document.querySelector('.continue-name');
+const continueButton = document.querySelector('.continue-name');
 const nameField = document.querySelector('#name-field');
-const videoButt = document.querySelector('.camera');
-const audioButt = document.querySelector('.audio');
+const videoButton = document.querySelector('.camera');
+const audioButton = document.querySelector('.audio');
+const rasisehandButton = document.querySelector('.raise-hand');
 const inviteParticipants = document.querySelector('.invite');
-const cutCall = document.querySelector('.cutcall');
-const screenShareButt = document.querySelector('.screenshare');
-const whiteboardButt = document.querySelector('.board-icon')
+const leaveButton = document.querySelector('.leaveButton');
+const screenshareButton = document.querySelector('.screenshare');
+const whiteboardButton = document.querySelector('.board-icon')
 
-const leftcont = document.querySelector('.left-container')
-const rightcont = document.querySelector('.right-container')
-const chatbutton = document.querySelector('.toggle-chat')
+const leftContainer = document.querySelector('.left-container')
+const rightContainer = document.querySelector('.right-container')
+const chatButton = document.querySelector('.toggle-chat')
 
-const whiteboardCont = document.querySelector('.whiteboard-container');
+const whiteboardContainer = document.querySelector('.whiteboard-container');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
 
 let boardVisisble = false;
 
-whiteboardCont.style.visibility = 'hidden';
+whiteboardContainer.style.visibility = 'hidden';
 
 let isDrawing = 0;
 let x = 0;
@@ -144,11 +145,15 @@ let audioAllowed = 1;
 
 let micInfo = {};
 let videoInfo = {};
+let handInfo = {};
 
 let videoTrackReceived = {};
 
 let mymuteicon = document.querySelector("#mymuteicon");
 mymuteicon.style.visibility = 'hidden';
+
+let myhandicon = document.querySelector("#myhandicon");
+myhandicon.style.visibility = 'hidden';
 
 let myvideooff = document.querySelector("#myvideooff");
 myvideooff.style.visibility = 'hidden';
@@ -211,7 +216,7 @@ function CopyClassText() {
 }
 
 
-continueButt.addEventListener('click', () => {
+continueButton.addEventListener('click', () => {
     if (nameField.value == '') return;
     username = nameField.value;
     overlayContainer.style.visibility = 'hidden';
@@ -223,7 +228,7 @@ continueButt.addEventListener('click', () => {
 nameField.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
         event.preventDefault();
-        continueButt.click();
+        continueButton.click();
     }
 });
 
@@ -305,6 +310,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             let newvideo = document.createElement('video');
             let name = document.createElement('div');
             let muteIcon = document.createElement('div');
+            let handIcon = document.createElement('div');
             let videoOff = document.createElement('div');
             videoOff.classList.add('video-off');
             muteIcon.classList.add('mute-symbol');
@@ -313,7 +319,9 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             vidCont.id = sid;
             muteIcon.id = `mute${sid}`;
             videoOff.id = `vidoff${sid}`;
+            handIcon.id = `hand${sid}`;
             muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
+            handIcon.innerHTML = `<i class="fa fa-hand-paper-o"></i>`;
             videoOff.innerHTML = 'Video Off'
             vidCont.classList.add('video-box');
             newvideo.classList.add('video-frame');
@@ -332,9 +340,15 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             else
                 videoOff.style.visibility = 'visible';
 
+            if (handInfo[sid] == 'on')
+                handIcon.style.visibility = 'hidden';
+            else
+                handIcon.style.visibility = 'visible';
+
             vidCont.appendChild(newvideo);
             vidCont.appendChild(name);
             vidCont.appendChild(muteIcon);
+            vidCont.appendChild(handIcon);
             vidCont.appendChild(videoOff);
 
             videoContainer.appendChild(vidCont);
@@ -453,14 +467,18 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     let name = document.createElement('div');
                     let muteIcon = document.createElement('div');
                     let videoOff = document.createElement('div');
+                    let handIcon = document.createElement('div');
                     videoOff.classList.add('video-off');
                     muteIcon.classList.add('mute-symbol');
+                    handIcon.classList.add('hand-symbol');
                     name.classList.add('participant-name');
                     name.innerHTML = `${cName[sid]}`;
                     vidCont.id = sid;
                     muteIcon.id = `mute${sid}`;
+                    handIcon.id = `hand${sid}`;
                     videoOff.id = `vidoff${sid}`;
                     muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
+                    handIcon.innerHTML = `<i class="fa fa-hand-paper-o"></i>`;
                     videoOff.innerHTML = 'Video Off'
                     vidCont.classList.add('video-box');
                     newvideo.classList.add('video-frame');
@@ -479,9 +497,15 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     else
                         videoOff.style.visibility = 'visible';
 
+                    if (handInfo[sid] == 'on')
+                        handIcon.style.visibility = 'hidden';
+                    else
+                        handIcon.style.visibility = 'visible';
+
                     vidCont.appendChild(newvideo);
                     vidCont.appendChild(name);
                     vidCont.appendChild(muteIcon);
+                    vidCont.appendChild(handIcon);
                     vidCont.appendChild(videoOff);
 
                     videoContainer.appendChild(vidCont);
@@ -564,29 +588,29 @@ socket.on('message', (msg, sendername, time) => {
 
 let flag = true;
 
-chatbutton.addEventListener('click', () => {    
+chatButton.addEventListener('click', () => {    
     flag = !flag;
 
     if(flag){
-    rightcont.style.display = "none";
-    videoContainer.style.maxWidth = "1150px";
+    rightContainer.style.display = "none";
+    videoContainer.style.maxWidth = "100%";
     videoContainer.style.margin = "0 auto";
     }
     else{
-    rightcont.style.display = "block";
+    rightContainer.style.display = "block";
     videoContainer.style.maxWidth = "1150px";
     }
 })
 
-videoButt.addEventListener('click', () => {
+videoButton.addEventListener('click', () => {
 
     if (videoAllowed) {
         for (let key in videoTrackSent) {
             videoTrackSent[key].enabled = false;
         }
-        videoButt.innerHTML = `<i class="fas fa-video-slash"></i> <span class="tooltiptext">Turn Video On</span>`;
+        videoButton.innerHTML = `<i class="fas fa-video-slash"></i> <span class="tooltiptext">Turn Video On</span>`;
         videoAllowed = 0;
-        videoButt.style.backgroundColor = "red";
+        videoButton.style.backgroundColor = "red";
 
 
         if (mystream) {
@@ -605,9 +629,9 @@ videoButt.addEventListener('click', () => {
         for (let key in videoTrackSent) {
             videoTrackSent[key].enabled = true;
         }
-        videoButt.innerHTML = `<i class="fas fa-video"></i> <span class="tooltiptext">Turn Video Off</span>`;
+        videoButton.innerHTML = `<i class="fas fa-video"></i> <span class="tooltiptext">Turn Video Off</span>`;
         videoAllowed = 1;
-        videoButt.style.backgroundColor = "rgb(37,0,255)";
+        videoButton.style.backgroundColor = "rgb(37,0,255)";
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'video')
@@ -622,16 +646,27 @@ videoButt.addEventListener('click', () => {
     }
 })
 
+rasisehandButton.addEventListener('click', () => {
+    if(myhandicon.style.visibility == 'visible'){
+        myhandicon.style.visibility = 'hidden';
+        socket.emit('action', 'unraisehand');
+    }
+    else{
+        myhandicon.style.visibility = 'visible';
+        socket.emit('action', 'raisehand');
+    }
 
-audioButt.addEventListener('click', () => {
+})
+
+audioButton.addEventListener('click', () => {
 
     if (audioAllowed) {
         for (let key in audioTrackSent) {
             audioTrackSent[key].enabled = false;
         }
-        audioButt.innerHTML = `<i class="fas fa-microphone-slash"></i> <span class="tooltiptext">Unmute</span>`;
+        audioButton.innerHTML = `<i class="fas fa-microphone-slash"></i> <span class="tooltiptext">Unmute</span>`;
         audioAllowed = 0;
-        audioButt.style.backgroundColor = "red";
+        audioButton.style.backgroundColor = "red";
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'audio')
@@ -642,14 +677,15 @@ audioButt.addEventListener('click', () => {
         mymuteicon.style.visibility = 'visible';
 
         socket.emit('action', 'mute');
+
     }
     else {
         for (let key in audioTrackSent) {
             audioTrackSent[key].enabled = true;
         }
-        audioButt.innerHTML = `<i class="fas fa-microphone"></i> <span class="tooltiptext">Mute</span>`;
+        audioButton.innerHTML = `<i class="fas fa-microphone"></i> <span class="tooltiptext">Mute</span>`;
         audioAllowed = 1;
-        audioButt.style.backgroundColor = "rgb(37,0,255)";
+        audioButton.style.backgroundColor = "rgb(37,0,255)";
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'audio')
@@ -664,7 +700,16 @@ audioButt.addEventListener('click', () => {
 })
 
 inviteParticipants.addEventListener('click', () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Meeting link copied to clipboard, send this to the participants you want to add!')
+})
 
+screenshareButton.addEventListener('click', () => {
+    let displayMediaOptions = {video: true, audio: false};
+    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+    .then((stream) => {
+        video_el.srcObject = stream;
+    })
 })
 
 socket.on('action', (msg, sid) => {
@@ -688,19 +733,29 @@ socket.on('action', (msg, sid) => {
         document.querySelector(`#vidoff${sid}`).style.visibility = 'hidden';
         videoInfo[sid] = 'on';
     }
+    else if (msg == 'raisehand') {
+        console.log(sid + ' raised their hand');
+        document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
+        handInfo[sid] = 'off';
+    }
+    else if (msg == 'unraisehand') {
+        console.log(sid + ' unraised their hand');
+        document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
+        handInfo[sid] = 'on';
+    }
 })
 
-whiteboardButt.addEventListener('click', () => {
+whiteboardButton.addEventListener('click', () => {
     if (boardVisisble) {
-        whiteboardCont.style.visibility = 'hidden';
+        whiteboardContainer.style.visibility = 'hidden';
         boardVisisble = false;
     }
     else {
-        whiteboardCont.style.visibility = 'visible';
+        whiteboardContainer.style.visibility = 'visible';
         boardVisisble = true;
     }
 })
 
-cutCall.addEventListener('click', () => {
+leaveButton.addEventListener('click', () => {
     location.href = '/';
 })

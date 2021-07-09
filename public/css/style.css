@@ -325,6 +325,15 @@ navbar .logo {
   right: 10px;
   font-size: 30px;
 }
+
+.video-container .video-box .hand-symbol {
+  color: yellow;
+  position: absolute;
+  top: 10px;  
+  right: 10px;
+  font-size: 30px;
+}
+
 .video-container-single {
   height: 77vh;
 }
@@ -373,6 +382,15 @@ navbar .logo {
   font-size: 20px;
   bottom: 10px;
 }
+
+.video-container-single .video-box .hand-symbol {
+  color: yellow;
+  position: absolute;
+  top: 10px;  
+  right: 10px;
+  font-size: 30px;
+}
+
 .footer {
   background-color: rgb(37, 37, 37);
   position: relative;
@@ -423,7 +441,7 @@ navbar .logo {
   display:none;
 }
 
-.cutcall:hover {
+.leaveButton:hover {
   cursor: pointer;
   background-color: red !important;
 }
