@@ -145,15 +145,11 @@ let audioAllowed = 1;
 
 let micInfo = {};
 let videoInfo = {};
-let handInfo = {};
 
 let videoTrackReceived = {};
 
 let mymuteicon = document.querySelector("#mymuteicon");
 mymuteicon.style.visibility = 'hidden';
-
-let myhandicon = document.querySelector("#myhandicon");
-myhandicon.style.visibility = 'hidden';
 
 let myvideooff = document.querySelector("#myvideooff");
 myvideooff.style.visibility = 'hidden';
@@ -287,13 +283,12 @@ function startCall() {
 
 }
 
-function handleVideoOffer(offer, sid, cname, micinf, vidinf, handinf) {
+function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
 
     cName[sid] = cname;
     console.log('video offered recevied');
     micInfo[sid] = micinf;
     videoInfo[sid] = vidinf;
-    handInfo[sid] = handinf;
     connections[sid] = new RTCPeerConnection(configuration);
 
     connections[sid].onicecandidate = function (event) {
@@ -312,18 +307,14 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf, handinf) {
             let name = document.createElement('div');
             let muteIcon = document.createElement('div');
             let videoOff = document.createElement('div');
-            let handIcon = document.createElement('div');
             videoOff.classList.add('video-off');
             muteIcon.classList.add('mute-symbol');
-            handIcon.classList.add('hand-symbol');
             name.classList.add('participant-name');
             name.innerHTML = `${cName[sid]}`;
             vidCont.id = sid;
             muteIcon.id = `mute${sid}`;
             videoOff.id = `vidoff${sid}`;
-            handIcon.id = `hand${sid}`;
             muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
-            handIcon.innerHTML = `<i class="fa fa-hand-paper-o"></i>`;
             videoOff.innerHTML = 'Video Off'
             vidCont.classList.add('video-box');
             newvideo.classList.add('video-frame');
@@ -342,15 +333,9 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf, handinf) {
             else
                 videoOff.style.visibility = 'visible';
 
-            if (handInfo[sid] == 'on')
-                handIcon.style.visibility = 'hidden';
-            else
-                handIcon.style.visibility = 'visible';
-
             vidCont.appendChild(newvideo);
             vidCont.appendChild(name);
             vidCont.appendChild(muteIcon);
-            vidCont.appendChild(handIcon);
             vidCont.appendChild(videoOff);
 
             videoContainer.appendChild(vidCont);
@@ -438,7 +423,7 @@ socket.on('video-answer', handleVideoAnswer);
 
 socket.on('screenshare', handleVideoOffer);
 
-socket.on('join room', async (conc, cnames, micinfo, videoinfo, handinfo) => {
+socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
     socket.emit('getCanvas');
     if (cnames)
         cName = cnames;
@@ -448,10 +433,6 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo, handinfo) => {
 
     if (videoinfo)
         videoInfo = videoinfo;
-
-    if(handinfo)
-        handInfo = handinfo;
-
 
     console.log(cName);
     if (conc) {
@@ -474,18 +455,14 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo, handinfo) => {
                     let name = document.createElement('div');
                     let muteIcon = document.createElement('div');
                     let videoOff = document.createElement('div');
-                    let handIcon = document.createElement('div');
                     videoOff.classList.add('video-off');
                     muteIcon.classList.add('mute-symbol');
-                    handIcon.classList.add('hand-symbol');
                     name.classList.add('participant-name');
                     name.innerHTML = `${cName[sid]}`;
                     vidCont.id = sid;
                     muteIcon.id = `mute${sid}`;
-                    handIcon.id = `hand${sid}`;
                     videoOff.id = `vidoff${sid}`;
                     muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
-                    handIcon.innerHTML = `<i class="fa fa-hand-paper-o"></i>`;
                     videoOff.innerHTML = 'Video Off'
                     vidCont.classList.add('video-box');
                     newvideo.classList.add('video-frame');
@@ -504,16 +481,10 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo, handinfo) => {
                     else
                         videoOff.style.visibility = 'visible';
 
-                    if (handInfo[sid] == 'on')
-                        handIcon.style.visibility = 'hidden';
-                    else
-                        handIcon.style.visibility = 'visible';
-
                     vidCont.appendChild(newvideo);
                     vidCont.appendChild(name);
                     vidCont.appendChild(muteIcon);
                     vidCont.appendChild(videoOff);
-                    vidCont.appendChild(handIcon);
 
                     videoContainer.appendChild(vidCont);
 
@@ -572,6 +543,25 @@ sendButton.addEventListener('click', () => {
     messageField.value = '';
     socket.emit('message', msg, username, roomid);
 })
+
+var raised = false;
+
+rasisehandButton.addEventListener('click', () => {
+    if(raised){
+        raised = !raised;
+        rasisehandButton.style.backgroundColor = 'rgb(0,37,255)';
+        const msg = `${username} unraised thier hand`;
+        socket.emit('message', msg, username, roomid);
+    }
+    else{
+        raised = !raised;
+        rasisehandButton.style.backgroundColor = '#393e46';
+        const msg = `${username} raised thier hand`;
+        socket.emit('message', msg, username, roomid);
+    }
+    
+})
+
 
 messageField.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -653,17 +643,6 @@ videoButton.addEventListener('click', () => {
     }
 })
 
-rasisehandButton.addEventListener('click', () => {
-    if(myhandicon.style.visibility == 'visible'){
-        myhandicon.style.visibility = 'hidden';
-        socket.emit('action', 'unraisehand');
-    }
-    else{
-        myhandicon.style.visibility = 'visible';
-        socket.emit('action', 'raisehand');
-    }
-
-})
 
 audioButton.addEventListener('click', () => {
 
@@ -825,16 +804,6 @@ socket.on('action', (msg, sid) => {
         console.log(sid + 'turned video on');
         document.querySelector(`#vidoff${sid}`).style.visibility = 'hidden';
         videoInfo[sid] = 'on';
-    }
-    else if (msg == 'raisehand') {
-        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} raised their hand`, `Bot`, moment().format(
-            "h:mm a"
-        ));
-    }
-    else if (msg == 'unraisehand') {
-        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} unraised their hand`, `Bot`, moment().format(
-            "h:mm a"
-        ));
     }
 })
 
