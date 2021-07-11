@@ -274,8 +274,6 @@ navbar .logo {
 .whiteboard-container .colors-container .clearboard:hover {
   cursor: pointer;
 }
-
-
 .video-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -396,6 +394,7 @@ navbar .logo {
   position: relative;
   margin-bottom: 10px;
 }
+
 .utils {
   text-align: center;
   margin: 0 auto;
@@ -407,6 +406,7 @@ navbar .logo {
   padding: 15px;
   justify-content: center;
 }
+
 .audio {
   background-color: rgb(0,37,255);
   text-align: center;
@@ -418,10 +418,12 @@ navbar .logo {
   border-radius: 100px;
   transition: background-color 0.3s;
 }
+
 .audio:hover {
   cursor: pointer;
-  background-color: #393e46;
+  background-color: #393e46 !important;
 }
+
 .camera {
   background-color: rgb(0,37,255);
   text-align: center;
@@ -432,16 +434,17 @@ navbar .logo {
   border-radius: 100px;
   transition: background-color 0.3s;
 }
+
 .camera:hover {
   cursor: pointer;
-  background-color: #393e46;
+  background-color: #393e46 !important;
 }
 
 .copycode-container{
   display:none;
 }
 
-.leaveButton:hover {
+.leaveButton{
   cursor: pointer;
   background-color: red !important;
 }
@@ -494,7 +497,7 @@ navbar .logo {
 
 .chat-container {
   background-color: rgb(37, 37, 37);
-  height: 84vh;
+  height: 650px;
   padding: 10px;
   padding-top: 10px;
   overflow-y: scroll;
@@ -555,6 +558,7 @@ navbar .logo {
 
 .chat-input-box {
   width: 100%;
+  border-radius: 10px;
 }
 
 .chat-send-box {
@@ -568,7 +572,7 @@ navbar .logo {
   font-size: 0.85rem;
   padding: 4px 10px;
   border: none;
-  border-bottom: 3px solid rgb(0,37,255);
+  border-radius: 10px;
   color: whitesmoke;
 }
 
@@ -580,18 +584,17 @@ navbar .logo {
   height: 36px;
   padding: 5px 20px;
   border: none;
-  background-color: rgba(20, 59, 8, 0.87);
-  color: rgb(0,37,255);
+  background-color: rgb(0,37,255);
+  color: white;
   font-weight: bold;
   font-size: 0.85rem;
-  border-radius: 2px;
+  border-radius: 10px;
   transition: background-color 0.5s;
 }
 
 .chat-send:hover {
-  color: #2980b9;
   cursor: pointer;
-  background-color: #f3f3f3;
+  background-color: #393e46;
 }
 
 .chat-send:focus {

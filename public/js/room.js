@@ -287,12 +287,13 @@ function startCall() {
 
 }
 
-function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
+function handleVideoOffer(offer, sid, cname, micinf, vidinf, handinf) {
 
     cName[sid] = cname;
     console.log('video offered recevied');
     micInfo[sid] = micinf;
     videoInfo[sid] = vidinf;
+    handInfo[sid] = handinf;
     connections[sid] = new RTCPeerConnection(configuration);
 
     connections[sid].onicecandidate = function (event) {
@@ -310,10 +311,11 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             let newvideo = document.createElement('video');
             let name = document.createElement('div');
             let muteIcon = document.createElement('div');
-            let handIcon = document.createElement('div');
             let videoOff = document.createElement('div');
+            let handIcon = document.createElement('div');
             videoOff.classList.add('video-off');
             muteIcon.classList.add('mute-symbol');
+            handIcon.classList.add('hand-symbol');
             name.classList.add('participant-name');
             name.innerHTML = `${cName[sid]}`;
             vidCont.id = sid;
@@ -434,7 +436,9 @@ socket.on('new icecandidate', handleNewIceCandidate);
 
 socket.on('video-answer', handleVideoAnswer);
 
-socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
+socket.on('screenshare', handleVideoOffer);
+
+socket.on('join room', async (conc, cnames, micinfo, videoinfo, handinfo) => {
     socket.emit('getCanvas');
     if (cnames)
         cName = cnames;
@@ -444,6 +448,9 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
 
     if (videoinfo)
         videoInfo = videoinfo;
+
+    if(handinfo)
+        handInfo = handinfo;
 
 
     console.log(cName);
@@ -505,8 +512,8 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     vidCont.appendChild(newvideo);
                     vidCont.appendChild(name);
                     vidCont.appendChild(muteIcon);
-                    vidCont.appendChild(handIcon);
                     vidCont.appendChild(videoOff);
+                    vidCont.appendChild(handIcon);
 
                     videoContainer.appendChild(vidCont);
 
@@ -684,8 +691,11 @@ audioButton.addEventListener('click', () => {
             audioTrackSent[key].enabled = true;
         }
         audioButton.innerHTML = `<i class="fas fa-microphone"></i> <span class="tooltiptext">Mute</span>`;
+        
         audioAllowed = 1;
+
         audioButton.style.backgroundColor = "rgb(37,0,255)";
+        
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'audio')
@@ -704,13 +714,96 @@ inviteParticipants.addEventListener('click', () => {
     alert('Meeting link copied to clipboard, send this to the participants you want to add!')
 })
 
+function shareScreen() {
+    h.shareScreen().then((stream) => {
+        h.toggleShareIcons(true);
+
+        //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
+        //It will be enabled was user stopped sharing screen
+        h.toggleVideoBtnDisabled(true);
+
+        //save my screen stream
+        screen = stream;
+
+        //share the new stream with all partners
+        broadcastNewTracks(stream, 'video', false);
+
+        //When the stop sharing button shown by the browser is clicked
+        screen.getVideoTracks()[0].addEventListener('ended', () => {
+            stopSharingScreen();
+        });
+    }).catch((e) => {
+        console.error(e);
+    });
+}
+
+
+function stopSharingScreen() {
+    //enable video toggle btn
+    h.toggleVideoBtnDisabled(false);
+
+    return new Promise((res, rej) => {
+        screen.getTracks().length ? screen.getTracks().forEach(track => track.stop()) : '';
+
+        res();
+    }).then(() => {
+        h.toggleShareIcons(false);
+        broadcastNewTracks(myStream, 'video');
+    }).catch((e) => {
+        console.error(e);
+    });
+}
+
 screenshareButton.addEventListener('click', () => {
-    let displayMediaOptions = {video: true, audio: false};
-    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
-    .then((stream) => {
-        video_el.srcObject = stream;
-    })
-})
+    screenShareToggle();
+});
+
+let screenshareEnabled = false;
+
+function screenShareToggle() {
+    let screenMediaPromise;
+    if (!screenshareEnabled) {
+        if (navigator.getDisplayMedia) {
+            screenMediaPromise = navigator.getDisplayMedia({ video: true });
+        } else if (navigator.mediaDevices.getDisplayMedia) {
+            screenMediaPromise = navigator.mediaDevices.getDisplayMedia({ video: true });
+        } else {
+            screenMediaPromise = navigator.mediaDevices.getUserMedia({
+                video: { mediaSource: "screen" },
+            });
+        }
+    } else {
+        screenMediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
+    }
+    screenMediaPromise
+        .then((myscreenshare) => {
+            screenshareEnabled = !screenshareEnabled;
+            for (let key in connections) {
+                const sender = connections[key]
+                    .getSenders()
+                    .find((s) => (s.track ? s.track.kind === "video" : false));
+                sender.replaceTrack(myscreenshare.getVideoTracks()[0]);
+            }
+            myscreenshare.getVideoTracks()[0].enabled = true;
+            const newStream = new MediaStream([
+                myscreenshare.getVideoTracks()[0], 
+            ]);
+            myvideo.srcObject = newStream;
+            myvideo.muted = true;
+            mystream = newStream;
+            screenshareButton.innerHTML = (screenshareEnabled 
+                ? `<i class="fas fa-desktop"></i><span class="tooltiptext">Stop Share Screen</span>`
+                : `<i class="fas fa-desktop"></i><span class="tooltiptext">Share Screen</span>`
+            );
+            myscreenshare.getVideoTracks()[0].onended = function() {
+                if (screenshareEnabled) screenShareToggle();
+            };
+        })
+        .catch((e) => {
+            alert("Unable to share screen: " + e.message);
+            console.error(e);
+        });
+}
 
 socket.on('action', (msg, sid) => {
     if (msg == 'mute') {
@@ -734,14 +827,14 @@ socket.on('action', (msg, sid) => {
         videoInfo[sid] = 'on';
     }
     else if (msg == 'raisehand') {
-        console.log(sid + ' raised their hand');
-        document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
-        handInfo[sid] = 'off';
+        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} raised their hand`, `Bot`, moment().format(
+            "h:mm a"
+        ));
     }
     else if (msg == 'unraisehand') {
-        console.log(sid + ' unraised their hand');
-        document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
-        handInfo[sid] = 'on';
+        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} unraised their hand`, `Bot`, moment().format(
+            "h:mm a"
+        ));
     }
 })
 

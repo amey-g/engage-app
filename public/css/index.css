@@ -32,7 +32,8 @@ navbar .logo {
   color: whitesmoke;
   font-weight: bold;
   padding: 0;
-  margin-top: 12px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .main {
@@ -43,14 +44,17 @@ navbar .logo {
 }
 
 .left-container {
-  width: 35%;
-  padding: 20px;
+  width: 40%;
+  margin-left: 2%;
+  margin-right: 2%;
   text-align: center;
   vertical-align: middle;
 }
 
 .right-container{
   width: 65%;
+  margin-left: 0px;
+  padding-left: 0px;
   text-align: center;
 }
 
@@ -60,7 +64,9 @@ navbar .logo {
   border-radius: 10px;
   width: 100%;
   top:20%;
-  font-size: 40px;
+  font-size: 30px;
+  cursor: pointer;
+  background-color: greenyellow;
 }
 
 .room-code{
@@ -69,7 +75,8 @@ navbar .logo {
   width: 100%;
   border-radius: 10px;
   top:35%;
-  font-size: 40px;
+  font-size: 30px;
+  text-align: center;
 }
 
 .join-button{
@@ -78,7 +85,9 @@ navbar .logo {
   width: 100%;
   border-radius: 10px;
   top:36%;
-  font-size: 40px;
+  font-size: 30px;
+  cursor: pointer;
+  background-color: greenyellow;
 }
 
 .controls {
@@ -154,9 +163,23 @@ navbar .logo {
     width: 100%;
     margin-right: 0;
   }
-  .main .video-container {
-    margin-top: 100px;
+  .video-container {
+    width: 100vw;
+    margin-top: 50px;
     margin-bottom: 100px;
+  }
+  .left-container {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    align-self: center;
+    margin-left: 2%;
+    margin-right: 2%;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .room-code{
+    margin-top: 50px;
   }
 }
 
