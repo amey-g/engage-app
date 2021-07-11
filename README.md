@@ -10,4 +10,13 @@ A Microsoft Teams clone built with node.js using WebRTC and socket.io for the Mi
 - In-Built Chatroom for all paricipants
 - Raise Hand fucntionality for participants to come into the speaker's attention
 
-## 
+## Way Forward (Features yet to be implemented)
+- Build a completely responsive frontend for the application to work seamlessly cross-platform
+- OAuth 2.0 based user authentication
+- Host Controls (Allow the bost to mute, remove, turn off camera, ban from chat a particular user)
+- Minor Bug Fixes
+
+## Bugs
+- Whiteboard pointer gets offsetted to the left when the chat drawer is open
+- Frontend breaks after 6 users join the room, even though the backend supports multiple users
+- The last message in a chat window often gets overlayed by the chat input box
