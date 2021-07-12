@@ -1,4 +1,4 @@
-const createButton = document.querySelector(".host-button");
+const createButton = document.querySelector('.host-button');
 const videoCont = document.querySelector('.video');
 const codeCont = document.querySelector('.room-code');
 const joinBut = document.querySelector('.join-button');

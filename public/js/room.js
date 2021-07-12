@@ -25,124 +25,6 @@ const whiteboardContainer = document.querySelector('.whiteboard-container');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
 
-//ctx.translate(800, 0);
-ctx.scale(-1, 1);
-
-let boardVisisble = false;
-
-whiteboardContainer.style.visibility = 'hidden';
-
-let isDrawing = 0;
-let x = 0;
-let y = 0;
-let color = "black";
-let drawsize = 3;
-let colorRemote = "black";
-let drawsizeRemote = 3;
-
-function fitToContainer(canvas) {
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-}
-
-fitToContainer(canvas);
-
-//getCanvas call is under join room call
-socket.on('getCanvas', url => {
-    let img = new Image();
-    img.onload = start;
-    img.src = url;
-
-    function start() {
-        ctx.drawImage(img, 0, 0);
-    }
-
-    console.log('got canvas', url)
-})
-
-function setColor(newcolor) {
-    color = newcolor;
-    drawsize = 3;
-}
-
-function setEraser() {
-    color = "white";
-    drawsize = 10;
-}
-
-function reportWindowSize() {
-    fitToContainer(canvas);
-}
-
-window.onresize = reportWindowSize;
-
-
-function clearBoard() {
-    if (window.confirm('Are you sure you want to clear the board?')) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        socket.emit('store canvas', canvas.toDataURL());
-        socket.emit('clearBoard');
-    }
-    else return;
-}
-
-socket.on('clearBoard', () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-})
-
-function draw(newx, newy, oldx, oldy) {
-    ctx.strokeStyle = color;
-    ctx.lineWidth = drawsize;
-    ctx.beginPath();
-    ctx.moveTo(oldx, oldy);
-    ctx.lineTo(newx, newy);
-    ctx.stroke();
-    ctx.closePath();
-
-    socket.emit('store canvas', canvas.toDataURL());
-
-}
-
-function drawRemote(newx, newy, oldx, oldy) {
-    ctx.strokeStyle = colorRemote;
-    ctx.lineWidth = drawsizeRemote;
-    ctx.beginPath();
-    ctx.moveTo(oldx, oldy);
-    ctx.lineTo(newx, newy);
-    ctx.stroke();
-    ctx.closePath();
-
-}
-
-canvas.addEventListener('mousedown', e => {
-    x = e.offsetX;
-    y = e.offsetY;
-    isDrawing = 1;
-})
-
-canvas.addEventListener('mousemove', e => {
-    if (isDrawing) {
-        draw(e.offsetX, e.offsetY, x, y);
-        socket.emit('draw', e.offsetX, e.offsetY, x, y, color, drawsize);
-        x = e.offsetX;
-        y = e.offsetY;
-    }
-})
-
-window.addEventListener('mouseup', e => {
-    if (isDrawing) {
-        isDrawing = 0;
-    }
-})
-
-socket.on('draw', (newX, newY, prevX, prevY, color, size) => {
-    colorRemote = color;
-    drawsizeRemote = size;
-    drawRemote(newX, newY, prevX, prevY);
-})
-
 let videoAllowed = 1;
 let audioAllowed = 1;
 
@@ -547,24 +429,8 @@ sendButton.addEventListener('click', () => {
     socket.emit('message', msg, username, roomid);
 })
 
-var raised = false;
 
-rasisehandButton.addEventListener('click', () => {
-    if(raised){
-        raised = !raised;
-        rasisehandButton.style.backgroundColor = 'rgb(0,37,255)';
-        const msg = `${username} unraised thier hand`;
-        socket.emit('message', msg, 'Bot', roomid);
-    }
-    else{
-        raised = !raised;
-        rasisehandButton.style.backgroundColor = '#393e46';
-        const msg = `${username} raised thier hand`;
-        socket.emit('message', msg, 'Bot', roomid);
-    }
-    
-})
-
+//Function to send a message
 
 messageField.addEventListener("keyup", function (event) {
     if (event.keyCode === 13) {
@@ -572,6 +438,7 @@ messageField.addEventListener("keyup", function (event) {
         sendButton.click();
     }
 });
+
 
 socket.on('message', (msg, sendername, time) => {
     chatRoom.scrollTop = chatRoom.scrollHeight;
@@ -585,6 +452,9 @@ socket.on('message', (msg, sendername, time) => {
     </div>
 </div>`
 });
+
+
+//Function to pull and push the chat drawer
 
 let flag = true;
 
@@ -602,6 +472,7 @@ chatButton.addEventListener('click', () => {
     }
 })
 
+//Turn camera on and off
 videoButton.addEventListener('click', () => {
 
     if (videoAllowed) {
@@ -646,7 +517,7 @@ videoButton.addEventListener('click', () => {
     }
 })
 
-
+//Mute/Unmute Functionality
 audioButton.addEventListener('click', () => {
 
     if (audioAllowed) {
@@ -691,16 +562,20 @@ audioButton.addEventListener('click', () => {
     }
 })
 
+//Function to copy the invite link to user clipboard
 inviteParticipants.addEventListener('click', () => {
     navigator.clipboard.writeText(window.location.href);
     alert('Meeting link copied to clipboard, send this to the participants you want to add!')
 })
 
+// Screenshare Functionality
+
+//Function to switch camera feed to screen feed and vice versa
 function shareScreen() {
     h.shareScreen().then((stream) => {
         h.toggleShareIcons(true);
 
-        //disable the video toggle btns while sharing screen. This is to ensure clicking on the btn does not interfere with the screen sharing
+        //disable the video toggle buttons while sharing screen. This is to ensure clicking on the button does not interfere with the screen sharing
         //It will be enabled was user stopped sharing screen
         h.toggleVideoBtnDisabled(true);
 
@@ -789,6 +664,30 @@ function screenShareToggle() {
         });
 }
 
+// Screenshare Functionality ends
+
+
+//Raise hand functionality
+
+var raised = false;
+
+rasisehandButton.addEventListener('click', () => {
+    if(raised){
+        raised = !raised;
+        rasisehandButton.style.backgroundColor = 'rgb(0,37,255)';
+        const msg = `${username} unraised thier hand`;
+        socket.emit('message', msg, 'Bot', roomid);
+    }
+    else{
+        raised = !raised;
+        rasisehandButton.style.backgroundColor = '#393e46';
+        const msg = `${username} raised thier hand`;
+        socket.emit('message', msg, 'Bot', roomid);
+    }
+    
+})
+
+//Displaying mute symbol and video off screen on clicking the mute button and camera button
 socket.on('action', (msg, sid) => {
     if (msg == 'mute') {
         console.log(sid + ' muted themself');
@@ -812,6 +711,19 @@ socket.on('action', (msg, sid) => {
     }
 })
 
+//redirection to index.html on clicking the Leave Button 
+leaveButton.addEventListener('click', () => {
+    location.href = '/';
+})
+
+
+
+// Whiteboard Functionality 
+
+//Setting the default visibilty of the whiteboard as hidden
+let boardVisisble = false;
+whiteboardContainer.style.visibility = 'hidden';
+
 whiteboardButton.addEventListener('click', () => {
     if (boardVisisble) {
         whiteboardContainer.style.visibility = 'hidden';
@@ -823,6 +735,118 @@ whiteboardButton.addEventListener('click', () => {
     }
 })
 
-leaveButton.addEventListener('click', () => {
-    location.href = '/';
+//Initialising Variables
+let isDrawing = 0;
+let x = 0;
+let y = 0;
+let color = "black";
+let drawsize = 3;
+let colorRemote = "black";
+let drawsizeRemote = 3;
+
+//Sizing the whiteboard canvas to fit the container
+function fitToContainer(canvas) {
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+fitToContainer(canvas);
+
+function reportWindowSize() {
+    fitToContainer(canvas);
+}
+window.onresize = reportWindowSize;
+
+socket.on('getCanvas', url => {
+    let img = new Image();
+    img.onload = start;
+    img.src = url;
+
+    function start() {
+        ctx.drawImage(img, 0, 0);
+    }
+
+    console.log('got canvas', url)
 })
+
+//Changing pen color
+function setColor(newcolor) {
+    color = newcolor;
+    drawsize = 3;
+}
+
+//Changing from pen to eraser
+function setEraser() {
+    color = "white";
+    drawsize = 10;
+}
+
+//Function to clear all content of the whiteboard
+function clearBoard() {
+    if (window.confirm('Are you sure you want to clear the board?')) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        socket.emit('store canvas', canvas.toDataURL());
+        socket.emit('clearBoard');
+    }
+    else return;
+}
+
+socket.on('clearBoard', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
+
+
+//Functions to implement the draw functionality
+
+function draw(newx, newy, oldx, oldy) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = drawsize;
+    ctx.beginPath();
+    ctx.moveTo(oldx, oldy);
+    ctx.lineTo(newx, newy);
+    ctx.stroke();
+    ctx.closePath();
+
+    socket.emit('store canvas', canvas.toDataURL());
+}
+
+function drawRemote(newx, newy, oldx, oldy) {
+    ctx.strokeStyle = colorRemote;
+    ctx.lineWidth = drawsizeRemote;
+    ctx.beginPath();
+    ctx.moveTo(oldx, oldy);
+    ctx.lineTo(newx, newy);
+    ctx.stroke();
+    ctx.closePath();
+
+}
+
+canvas.addEventListener('mousedown', e => {
+    x = e.offsetX;
+    y = e.offsetY;
+    isDrawing = 1;
+})
+
+canvas.addEventListener('mousemove', e => {
+    if (isDrawing) {
+        draw(e.offsetX, e.offsetY, x, y);
+        socket.emit('draw', e.offsetX, e.offsetY, x, y, color, drawsize);
+        x = e.offsetX;
+        y = e.offsetY;
+    }
+})
+
+window.addEventListener('mouseup', e => {
+    if (isDrawing) {
+        isDrawing = 0;
+    }
+})
+
+socket.on('draw', (newX, newY, prevX, prevY, color, size) => {
+    colorRemote = color;
+    drawsizeRemote = size;
+    drawRemote(newX, newY, prevX, prevY);
+})
+
+//Whiteboard Functionality ends
