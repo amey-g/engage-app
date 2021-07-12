@@ -2,6 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
+
+
 * {
   text-decoration: none;
   box-sizing: border-box;
@@ -150,7 +152,7 @@ navbar .logo {
   background-color: black;
   border-radius: 8px;
   object-fit: cover;
-  transform: scale(-1, 1);
+  /* transform: scale(-1, 1); */
 }
 
 

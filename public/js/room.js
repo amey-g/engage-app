@@ -25,6 +25,9 @@ const whiteboardContainer = document.querySelector('.whiteboard-container');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
 
+//ctx.translate(800, 0);
+ctx.scale(-1, 1);
+
 let boardVisisble = false;
 
 whiteboardContainer.style.visibility = 'hidden';
@@ -551,13 +554,13 @@ rasisehandButton.addEventListener('click', () => {
         raised = !raised;
         rasisehandButton.style.backgroundColor = 'rgb(0,37,255)';
         const msg = `${username} unraised thier hand`;
-        socket.emit('message', msg, username, roomid);
+        socket.emit('message', msg, 'Bot', roomid);
     }
     else{
         raised = !raised;
         rasisehandButton.style.backgroundColor = '#393e46';
         const msg = `${username} raised thier hand`;
-        socket.emit('message', msg, username, roomid);
+        socket.emit('message', msg, 'Bot', roomid);
     }
     
 })
@@ -742,6 +745,7 @@ let screenshareEnabled = false;
 function screenShareToggle() {
     let screenMediaPromise;
     if (!screenshareEnabled) {
+        // document.getElementById('vd1').style = 'transform : scale(1,1);'
         if (navigator.getDisplayMedia) {
             screenMediaPromise = navigator.getDisplayMedia({ video: true });
         } else if (navigator.mediaDevices.getDisplayMedia) {
@@ -752,6 +756,7 @@ function screenShareToggle() {
             });
         }
     } else {
+        // document.getElementById('vd1').style = 'transform : scale(-1,1);'
         screenMediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
     }
     screenMediaPromise

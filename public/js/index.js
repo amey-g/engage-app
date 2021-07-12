@@ -15,7 +15,7 @@ navigator.mediaDevices.getUserMedia(mediaConstraints).then(localstream => {
 })
 
 function uuidv4() {
-    return 'xxyxyxxyx'.replace(/[xy]/g, function (c) {
+    return 'xyxxyxyy'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
@@ -27,7 +27,6 @@ createButton.addEventListener('click', (e) => {
     e.preventDefault();
     createButton.disabled = true;
     createButton.innerHTML = 'Creating Room';
-    createButton.classList = 'host-clicked';
 
     setInterval(() => {
         if (createButton.innerHTML < hosttext) {
@@ -38,7 +37,6 @@ createButton.addEventListener('click', (e) => {
         }
     }, 500);
 
-    //const name = nameField.value;
     location.href = `/room.html?room=${uuidv4()}`;
 });
 
