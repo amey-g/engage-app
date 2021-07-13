@@ -12,6 +12,7 @@ const io = socketio(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//initialising variables
 let rooms = {};
 let socketroom = {};
 let socketname = {};
@@ -19,6 +20,7 @@ let micSocket = {};
 let videoSocket = {};
 let roomBoard = {};
 
+//socket functions 
 io.on('connect', socket => {
 
     socket.on("join room", (roomid, username) => {
@@ -103,8 +105,8 @@ io.on('connect', socket => {
         rooms[socketroom[socket.id]].splice(index, 1);
         io.to(socketroom[socket.id]).emit('user count', rooms[socketroom[socket.id]].length);
         delete socketroom[socket.id];
-        console.log('--------------------');
-        console.log(rooms[socketroom[socket.id]]);
+        //console.log('--------------------');
+        //console.log(rooms[socketroom[socket.id]]);
     });
 })
 

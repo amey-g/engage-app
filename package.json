@@ -1,7 +1,7 @@
 {
   "name": "socket-project",
   "version": "1.0.0",
-  "description": "A MS Teams Clone (video chat/meeting webapp) using WebRTC and WebSockets (socket.io).<br> <img align=\"center\">",
+  "description": "A Microsoft Teams Clone (video chat/meeting webapp) using WebRTC and WebSockets (socket.io).<br> <img align=\"center\">",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

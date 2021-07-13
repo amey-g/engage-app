@@ -1,7 +1,8 @@
+//Initialising variables
+
 const socket = io();
 const myvideo = document.querySelector("#vd1");
 const roomid = params.get("room");
-let username;
 const chatRoom = document.querySelector('.chat-container');
 const sendButton = document.querySelector('.chat-send');
 const messageField = document.querySelector('.chat-input');
@@ -25,6 +26,8 @@ const whiteboardContainer = document.querySelector('.whiteboard-container');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
 
+let username;
+
 let videoAllowed = 1;
 let audioAllowed = 1;
 
@@ -33,12 +36,14 @@ let videoInfo = {};
 
 let videoTrackReceived = {};
 
+//setting default visibility of the mute symbol and video off screen as hidden
 let mymuteicon = document.querySelector("#mymuteicon");
 mymuteicon.style.visibility = 'hidden';
 
 let myvideooff = document.querySelector("#myvideooff");
 myvideooff.style.visibility = 'hidden';
 
+//setting up stun and turn iceservers
 const configuration = { iceServers: [
     {
       'url': 'stun:stun.l.google.com:19302'
@@ -53,7 +58,8 @@ const configuration = { iceServers: [
       'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
       'username': '28224511:1379330808'
     }
-  ] }
+]}
+
 
 const mediaConstraints = { video: true, audio: true };
 
@@ -62,41 +68,11 @@ let cName = {};
 let audioTrackSent = {};
 let videoTrackSent = {};
 
+// user camera stream and screen stream
 let mystream, myscreenshare;
 
 
-document.querySelector('.roomcode').innerHTML = `${roomid}`
-
-function CopyClassText() {
-
-    var textToCopy = document.querySelector('.roomcode');
-    var currentRange;
-    if (document.getSelection().rangeCount > 0) {
-        currentRange = document.getSelection().getRangeAt(0);
-        window.getSelection().removeRange(currentRange);
-    }
-    else {
-        currentRange = false;
-    }
-
-    var CopyRange = document.createRange();
-    CopyRange.selectNode(textToCopy);
-    window.getSelection().addRange(CopyRange);
-    document.execCommand("copy");
-
-    window.getSelection().removeRange(CopyRange);
-
-    if (currentRange) {
-        window.getSelection().addRange(currentRange);
-    }
-
-    document.querySelector(".copycode-button").textContent = "Copied!"
-    setTimeout(()=>{
-        document.querySelector(".copycode-button").textContent = "Copy Code";
-    }, 5000);
-}
-
-
+//getting the name of the newly joined participant
 continueButton.addEventListener('click', () => {
     if (nameField.value == '') return;
     username = nameField.value;
@@ -113,6 +89,7 @@ nameField.addEventListener("keyup", function (event) {
     }
 });
 
+//checking if there are multiple participants on the call
 socket.on('user count', count => {
     if (count > 1) {
         videoContainer.className = 'video-container';
@@ -124,6 +101,7 @@ socket.on('user count', count => {
 
 let peerConnection;
 
+//handling any errors in getting access to the users media
 function handleGetUserMediaError(e) {
     switch (e.name) {
         case "NotFoundError":
@@ -145,8 +123,10 @@ function reportError(e) {
     return;
 }
 
-function startCall() {
 
+//functions to begin the call
+
+function startCall() {
     navigator.mediaDevices.getUserMedia(mediaConstraints)
         .then(localStream => {
             myvideo.srcObject = localStream;
@@ -164,8 +144,6 @@ function startCall() {
 
         })
         .catch(handleGetUserMediaError);
-
-
 }
 
 function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
@@ -226,8 +204,6 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             videoContainer.appendChild(vidCont);
 
         }
-
-
     };
 
     connections[sid].onremovetrack = function (event) {
@@ -569,7 +545,6 @@ inviteParticipants.addEventListener('click', () => {
 })
 
 // Screenshare Functionality
-
 //Function to switch camera feed to screen feed and vice versa
 function shareScreen() {
     h.shareScreen().then((stream) => {
@@ -620,7 +595,6 @@ let screenshareEnabled = false;
 function screenShareToggle() {
     let screenMediaPromise;
     if (!screenshareEnabled) {
-        // document.getElementById('vd1').style = 'transform : scale(1,1);'
         if (navigator.getDisplayMedia) {
             screenMediaPromise = navigator.getDisplayMedia({ video: true });
         } else if (navigator.mediaDevices.getDisplayMedia) {
@@ -631,7 +605,6 @@ function screenShareToggle() {
             });
         }
     } else {
-        // document.getElementById('vd1').style = 'transform : scale(-1,1);'
         screenMediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
     }
     screenMediaPromise
@@ -668,9 +641,7 @@ function screenShareToggle() {
 
 
 //Raise hand functionality
-
 var raised = false;
-
 rasisehandButton.addEventListener('click', () => {
     if(raised){
         raised = !raised;
@@ -719,7 +690,6 @@ leaveButton.addEventListener('click', () => {
 
 
 // Whiteboard Functionality 
-
 //Setting the default visibilty of the whiteboard as hidden
 let boardVisisble = false;
 whiteboardContainer.style.visibility = 'hidden';
@@ -848,5 +818,4 @@ socket.on('draw', (newX, newY, prevX, prevY, color, size) => {
     drawsizeRemote = size;
     drawRemote(newX, newY, prevX, prevY);
 })
-
 //Whiteboard Functionality ends
