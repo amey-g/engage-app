@@ -646,13 +646,13 @@ rasisehandButton.addEventListener('click', () => {
     if(raised){
         raised = !raised;
         rasisehandButton.style.backgroundColor = 'rgb(0,37,255)';
-        const msg = `${username} unraised thier hand`;
+        const msg = `${username} lowered their hand`;
         socket.emit('message', msg, 'Bot', roomid);
     }
     else{
         raised = !raised;
         rasisehandButton.style.backgroundColor = '#393e46';
-        const msg = `${username} raised thier hand`;
+        const msg = `${username} raised their hand`;
         socket.emit('message', msg, 'Bot', roomid);
     }
     

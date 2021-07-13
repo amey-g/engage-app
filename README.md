@@ -1,9 +1,9 @@
 # Microsoft Teams Clone - Engage 2021
 A Microsoft Teams clone built with node.js using WebRTC and socket.io for the Miscrosoft Engage 2021 Mentorship Programme.
 
-# IMPORTANT: Please set the zoom to 80% in the browser for the best User Experience
-
 ## Deployed Link : [Click Here!](https://amey-engage.herokuapp.com/)
+
+### IMPORTANT: Please set the zoom to 80% in the browser for the best User Experience
 
 ## Working Features
 - Multi User Video and Audio Calling
@@ -13,6 +13,44 @@ A Microsoft Teams clone built with node.js using WebRTC and socket.io for the Mi
 - Users can invite other participants to join the meeting room with a click of the button
 - In-Built Chatroom for all paricipants
 - Raise Hand fucntionality for participants to come into the speaker's attention
+
+<br>
+<br>
+
+
+![Homepage](./public/images/index.png)
+
+The homepage of the application. Users can join with a roomcode or host a new room.
+<br>
+<br>
+<br>
+<br>
+
+
+![Homepage](./public/images/group.png)
+
+The application allows multiple users to connect.
+<br>
+<br>
+<br>
+<br>
+
+![Homepage](./public/images/board.png)
+
+The application has an integrated collaborative whiteboard for users to share their ideas.
+<br>
+<br>
+<br>
+<br>
+
+![Homepage](./public/images/screenshare.png)
+
+Users can share their screens with the other participants.
+$~$
+$~$
+<br>
+<br>
+
 
 ## Way Forward (Features yet to be implemented)
 - Build a completely responsive frontend for the application to work seamlessly cross-platform
